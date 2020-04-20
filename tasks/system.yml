@@ -1,0 +1,6 @@
+---
+
+- name: "system − install packages"
+  package: name="{{ item.value|join(',') }}" state=present
+  loop: "{{ packages.system | dict2items }}"
+  when: "item.key in packages.enabled_groups"

@@ -1,0 +1,24 @@
+---
+
+- name: "snap − ensure snapd is installed"
+  package: name="snapd" state=present
+
+- name: "snap − ensure /snap symlink exists"
+  file:
+    src: /var/lib/snapd/snap
+    dest: /snap
+    owner: root
+    group: root
+    state: link
+
+- name: "snap − enable snapd.socket service"
+  service: name=snapd.socket state=started enabled=yes
+
+- name: "snap − install snap packages"
+  snap:
+    name: "{{ item.1.name }}"
+    classic: "{{ item.1.classic | default(False) }}"
+  loop: "{{ packages.snap | dict2items | subelements('value') }}"
+  when: "item.0.key in packages.enabled_groups"
+  loop_control:
+    label: "{{ item.1.name }}"

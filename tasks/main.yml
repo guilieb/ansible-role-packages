@@ -1,0 +1,13 @@
+---
+
+- import_tasks: system.yml
+  when: "'system' in packages"
+  tags: ["system"]
+
+- import_tasks: flatpak.yml
+  when: "'flatpak' in packages"
+  tags: ["flatpak"]
+
+- import_tasks: snap.yml
+  when: "'snap' in packages"
+  tags: ["snap"]

@@ -1,0 +1,19 @@
+---
+
+- name: "flatpak − ensure flatpak is installed"
+  package: name="flatpak" state=present
+
+- name: "flatpak − ensure flathub remote is present"
+  flatpak_remote:
+    name: flathub
+    state: present
+    flatpakrepo_url: "{{ FLATHUB_REPO_URL }}"
+
+- name: "flatpak − install flatpak packages"
+  flatpak:
+    name: "{{ item.1 }}"
+    state: present
+  loop: "{{ packages.flatpak | dict2items | subelements('value') }}"
+  when: "item.0.key in packages.enabled_groups"
+  loop_control:
+    label: "{{ item.1 }}"
