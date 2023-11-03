@@ -1,6 +1,6 @@
 ---
 
-- name: "system − install packages"
-  package: name="{{ item.value|join(',') }}" state=present
+- name: "system (fedora) − install packages"
+  dnf: name="{{ item.value|join(',') }}" state=present allowerasing=true
   loop: "{{ packages.system | dict2items }}"
-  when: "item.key in packages.enabled_groups"
+  when: ("item.key in packages.enabled_groups") and (ansible_distribution == 'Fedora')
